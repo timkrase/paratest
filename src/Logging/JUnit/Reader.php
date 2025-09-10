@@ -101,20 +101,19 @@ final class Reader implements MetaProviderInterface
 
     public function getFeedback(): string
     {
+        $successfulTests = $this->suite->tests
+            - $this->suite->errors
+            - $this->suite->warnings
+            - $this->suite->failures
+            - $this->suite->risky
+            - $this->suite->skipped;
+
         return str_repeat('E', $this->suite->errors)
             . str_repeat('W', $this->suite->warnings)
             . str_repeat('F', $this->suite->failures)
             . str_repeat('R', $this->suite->risky)
             . str_repeat('S', $this->suite->skipped)
-            . str_repeat(
-                '.',
-                $this->suite->tests
-                - $this->suite->errors
-                - $this->suite->warnings
-                - $this->suite->failures
-                - $this->suite->risky
-                - $this->suite->skipped,
-            );
+            . str_repeat('.', $successfulTests >= 0 ? $successfulTests : 0);
     }
 
     public function removeLog(): void
